@@ -19,11 +19,9 @@ urls = ('/', 'index',
         '/template', 'create_template',
         '/template/all', 'all_templates',
         '/modules', 'list_modules',
-
         '/modules/(.*)', 'get_module',
-
         '/nodes/(.*?)/(.*?)', 'get_node',
-        '/nodes/(.*)', 'list_nodes' 
+        '/nodes/(.*)', 'list_nodes'
         )
 
 render = web.template.render('templates/')
@@ -43,16 +41,8 @@ def buildNodeTree(treestring, nodes):
 #TODO
 #This should be moved, and database code shouldn't be handled here, it broke down right before deadline so this is a really stupid fix
 def buildModuleTree():
-    databasePath = 'mongodb://localhost:27017'
-    dbCon = MongoClient( databasePath )
-    database = dbCon['mibModules']
-    
-    posts = database['mib']
-    #posts = database.posts
-    output = str()
-    i = 0
     retString = "<div id='jstree'><ul>"
-    for post in posts.find():
+    for post in databasetool.getAllModules():
         module = mibtools.assembleTree(post)
         retString += '<li id="' + module['module'] +'" class="module">'
         retString += module['module']
@@ -82,13 +72,14 @@ class index:
         parser.parseMIB("./upload/"+filename)
         raise web.seeother('')
 
+#Not sure if database should return json or the conversion should be here
 class list_modules:
     def GET(self):
-        return databasetool.getAllModules() 
+        return databasetool.getAllModuleNames()
 
 class get_module:
     def GET(self, module):
-        return databasetool.getModule(module) 
+        return databasetool.getModule(module)
 
 class list_nodes:
     def GET(self, module):
@@ -118,7 +109,7 @@ class create_template:
         incoming = i.dataToSave
         template = json.loads(incoming)
         databasetool.insertTemplate(template)
-        return template['templatename']
+        return template
 
 #    def POST(self):
 #        data = web.data()

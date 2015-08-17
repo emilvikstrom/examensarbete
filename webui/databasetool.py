@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 #import json
 import bson.json_util as json
-def insertParsedMib(MIB): 
+def insertParsedMib(MIB):
 	databasePath = 'mongodb://localhost:27017'
 	dbCon = MongoClient( databasePath )
 	database = dbCon['mibModules']
@@ -13,11 +13,11 @@ def insertParsedMib(MIB):
 	collection.insert_one(MIB)
 	dbCon.close()
 
-def getAllModules():
+def getAllModuleNames():
 	databasePath = 'mongodb://localhost:27017'
 	dbCon = MongoClient( databasePath )
 	database = dbCon['mibModules']
-	
+
 	posts = database['mib']
 	#posts = database.posts
 	output = str()
@@ -26,15 +26,23 @@ def getAllModules():
 		output += '{\'id\' : ' + str(i) + ',\'moduleName\' : \'' +   post['moduleName']  + '\'}'
 		i += 1
 	dbCon.close()
-	print(output)
 	return output
+
+def getAllModules():
+    databasePath = 'mongodb://localhost:27017'
+    dbCon = MongoClient( databasePath )
+    database = dbCon['mibModules']
+    posts = database['mib']
+    output = posts.find()
+    dbCon.close()
+    return output
 
 def getModule(module):
 	databasePath = 'mongodb://localhost:27017'
 	dbCon = MongoClient( databasePath )
 	database = dbCon['mibModules']
 	posts = database['mib']
-	
+
 	post = dict(posts.find_one({'moduleName' : module}))
 	output = json.dumps(post)
 	dbCon.close()
