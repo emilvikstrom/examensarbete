@@ -1,0 +1,60 @@
+
+//Function for retrieving a module
+var getModule = function(module){
+	jQuery.getJSON( "http://172.20.32.192:8080/modules/" + module, function(data){
+		var items = [];
+		jQuery.each( data, function(key, val) {
+//			items.push("<li id='" + key + "'>" + key + "</li>" );
+//			if(key === "module"){
+//				console.log("Found key")
+//				jQuery("#datatable tr:last" ).after(
+//					"<tr><td>modulename</td><td>"+val+"</td></tr>"
+//				);
+//			}
+		});
+	
+		jQuery("<ul/>", {
+			"class": "my-new-list",
+			html: items.join( "" )
+		}).appendTo("body" );
+	});
+}
+
+var getNode = function(module, node){
+	//Clears table
+	jQuery("#datatable").empty()
+	jQuery.getJSON( "http://172.20.32.192:8080/nodes/" + module + "/" + node, function(data){
+		var items = [];
+		items.push("<table border='1'>");
+		jQuery.each( data, function(key, val) {
+			if(key === "syntax"){
+				items.push( "<tr><td>" + key + "</td>");
+				items.push("<td>"+prop+"</td><td>Type:"+val["type"]+"</td>");
+				console.log(prop);
+
+
+			items.push( "</tr>");
+			}else{
+				items.push( "<tr><td>" + key + "</td><td>" + val + "</td></tr>" );
+			}
+//			items.push("<li id='" + key + "'>" + key + "</li>" );
+//			if(key === "module"){
+//				console.log("Found key")
+//				jQuery("#datatable tr:last" ).after(
+//					"<tr><td>modulename</td><td>"+val+"</td></tr>"
+//				);
+//			}
+
+//			console.log("Key: " + key + " Val: " + val);
+
+		});
+		items.push("</table>");
+		jQuery("#datatable").append(items.join( "" ));	
+//		jQuery("<ul/>", {
+//			"class": "my-new-list",
+//			html: items.join( "" )
+//		}).appendTo("body" );
+	});
+}
+
+

@@ -1,0 +1,88 @@
+$def with (nodetree)
+
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Templatebuilder 0.0.1</title>
+	
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">		
+	<link rel="stylesheet" href="/static/themes/default/style.min.css" />
+
+	<script type="text/javascript" src="/static/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="/static/jstree.js"></script>
+	<script type="text/javascript" src="/static/MIBtools.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div class="row">
+		<div class="col-sm-3"></div>
+		<div class="col-sm-6"><h1>Tools for MIB parsing and template creation</h2></div>
+		<div class="col-sm-3"></div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-1"></div>
+	  	<div class="col-sm-3">
+			<div id="datatable">
+			</div>
+		</div>
+
+		<div class="col-sm-4"><br/>
+			<div id="uploadform">
+				<h2>Upload MIB files</h2>	
+				<form method="POST" enctype="multipart/form-data" action="">
+					<input type="file" name="myfile"/>
+					<br/>
+					<input type="submit"/>
+
+				</form>
+			</div>
+			<div id="ajaxtest"></div>
+		</div>
+	 	<div class="col-sm-4" style = "border:1px solid black;">
+			$:nodetree 
+		</div>
+
+	</div>
+
+-	<script>
+		jQuery(function(){
+				jQuery("#jstree")
+					.jstree(
+						{
+
+						"checkbox": {
+
+							"whole_node" : true,
+							"three_state" : false 
+
+						},
+						"plugins" : ["wholerow","checkbox" ]
+				}).on("changed.jstree", function(e, data){
+					var MIBnode = data.node.id;
+					var MIBclass = data.node.li_attr.class;
+					if( MIBclass === "module" ){
+						getModule(MIBnode);
+					}
+					else if(MIBclass === "node"){
+						for( prop in data.node.li_attr){
+							console.log("propname:" + prop);
+						}
+						var module = data.node.li_attr["data-root"];
+						getNode(module, MIBnode);
+					}
+					
+				});
+		});
+
+	
+	</script>
+</body>
+
+</html>
+
+
+<!-- "http://172.20.32.192:8080/modules" -->
