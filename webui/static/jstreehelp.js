@@ -19,6 +19,14 @@ jQuery(function(){
 				var selectedLeafs = getLeafsFromSelected(data, data.selected);
 				
 				currentDataForTemplate = assembleJSON(selectedLeafs);
+				
+				//Making JSONString
+				var jsonString = JSON.stringify(currentDataForTemplate);
+				console.log(jsonString);
+				//Setting hidden field to the string
+				jQuery("#dataField").val(jsonString);
+				var hiddenString = jQuery("#dataField").val();
+				console.log(hiddenString);
 
 				if( MIBclass === "module" ){
 					getModule(MIBnode);
@@ -29,24 +37,24 @@ jQuery(function(){
 				}
 			
 		});
-	jQuery("#sendtemplate").click(function(){
-
-		if(currentDataForTemplate != null){
-			var templatename = jQuery("#templatename").val();
-			console.log(templatename);
-			var postData = {
-				"templateName" : templatename,
-				"nodes" : currentDataForTemplate
-			};
-			jQuery.post(
-				'./template',
-				JSON.stringify(postData),
-				function(){
-					console.log("Sent the message")
-				}
-			);
-		}
-	});
+//	jQuery("#sendtemplate").click(function(){
+//
+//		if(currentDataForTemplate != null){
+//			var templatename = jQuery("#templatename").val();
+//			console.log(templatename);
+//			var postData = {
+//				"templateName" : templatename,
+//				"nodes" : currentDataForTemplate
+//			};
+//			jQuery.post(
+//				'./template',
+//				JSON.stringify(postData),
+//				function(){
+//					console.log("Sent the message")
+//				}
+//			);
+//		}
+//	});
 });
 
 var assembleJSON = function(listOfLeafs){

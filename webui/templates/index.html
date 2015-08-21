@@ -44,9 +44,15 @@ $def with (nodetree)
 			<div id="ajaxtest"></div>
 		</div>
 	 	<div class="col-sm-4" style = "border:1px solid black;">
-			<h5>Templatename: </h5><input type="text" id="templatename"/>
-			<br/>
-			<input type="button" value="Create Template" id="sendtemplate" />
+			<form action="template" method="POST">
+				<input value="Templatename" type="text" id="templatename" name="templatename"/>
+				<input type="hidden" id="dataField" name="jsonField"/>
+				<br/>
+				<!--<input type="button" value="Create Template" id="sendtemplate" />-->
+
+				<input type="submit"/>
+
+			</form>
 			$:nodetree
 		</div>
 

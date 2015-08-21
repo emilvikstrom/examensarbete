@@ -120,15 +120,23 @@ class create_template:
         return "You can only post to this"
 
     def POST(self):
-        data = web.data()
-        incoming = json.loads(data)
-        templateName = incoming['templateName']
-        recievednodes = mibtemplate.getNodes(incoming['nodes'])
-        web.debug(recievednodes)
-        web.debug("DONEDONEDONEDONEDONE")
-        template = mibtemplate.createTemplate(templateName, recievednodes)
-        web.debug(template)
-        raise web.seeother('')
+        i = web.input()
+        nodes = json.loads(i['jsonField'])
+        templatename = i['templatename']
+        recievednodes = mibtemplate.getNodes(nodes)
+        template = mibtemplate.createTemplate(templatename, recievednodes)
+        return template
+
+#    def POST(self):
+#        data = web.data()
+#        incoming = json.loads(data)
+#        templateName = incoming['templateName']
+#        recievednodes = mibtemplate.getNodes(incoming['nodes'])
+#        web.debug(recievednodes)
+#        web.debug("DONEDONEDONEDONEDONE")
+#        template = mibtemplate.createTemplate(templateName, recievednodes)
+#        web.debug(template)
+#        raise web.seeother('')
 
 if __name__ == '__main__':
     app.run()
