@@ -1,0 +1,70 @@
+$def with (template)
+
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Templatebuilder 0.0.1</title>
+	
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">		
+	<link rel="stylesheet" href="/static/themes/default/style.min.css" />
+	<link rel="stylesheet" href="/static/jstreecheckbox.css"/>
+	<script type="text/javascript" src="/static/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="/static/jstree.js"></script>
+	<script type="text/javascript" src="/static/MIBtools.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div class="row">
+		<div class="col-sm-3"></div>
+		<div class="col-sm-6"><center><h1>Preview</h2></center></div>
+		<div class="col-sm-3"></div>
+	</div>
+
+	<div class="row">
+		
+		<div class="col-sm-3"></div>
+
+		<div class="col-sm-6">
+			<div class="table-responsive">
+				<table class="table" id="previewTable">
+				</table>
+			</div>
+		</div>
+
+		<div class="col-sm-3"></div>
+		<form action="template" method="post">
+			<input type="hidden" id="dataToSave" name="dataToSave"/>
+			<input type="submit" value="Save"/>
+		</form>
+	</div>
+	<script type="text/javascript">
+		var template = $:template
+		console.log(template);
+		var tableHead = "<thead><tr><th>Nodename</th><th>OID</th><th>Access</th><th>Syntax</th></tr></thead>";
+		jQuery("#previewTable").append(tableHead);
+		nodes = template.objects
+		console.log(nodes);
+		
+		var jsonString = JSON.stringify(template);
+		jQuery("#dataToSave").val(jsonString);
+		var tableBody = [];
+		tableBody.push("<tbody>");
+		for(var i = 0; i < nodes.length; i++){
+			currentNode = nodes[i];
+			console.log(currentNode);
+			tableBody.push("<tr><td>"+currentNode["nodeName"]+"</td><td>"+currentNode["oid"]+"</td><td>"+currentNode["access"]+"</td><td>"+currentNode["syntax"]+"</td></tr>");
+		}
+		tableBody.push("</tbody>");
+		tbody = tableBody.join();
+		jQuery("#previewTable").append(tableBody);
+	</script>
+
+</body>
+
+</html>
+
+
+<!-- "http://172.20.32.192:8080/modules" -->

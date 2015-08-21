@@ -37,24 +37,7 @@ jQuery(function(){
 				}
 			
 		});
-//	jQuery("#sendtemplate").click(function(){
-//
-//		if(currentDataForTemplate != null){
-//			var templatename = jQuery("#templatename").val();
-//			console.log(templatename);
-//			var postData = {
-//				"templateName" : templatename,
-//				"nodes" : currentDataForTemplate
-//			};
-//			jQuery.post(
-//				'./template',
-//				JSON.stringify(postData),
-//				function(){
-//					console.log("Sent the message")
-//				}
-//			);
-//		}
-//	});
+
 });
 
 var assembleJSON = function(listOfLeafs){
