@@ -4,6 +4,7 @@ from pymongo import MongoClient
 import bson.json_util as json
 import mibtools
 import parseMIB as parser
+import mibtemplate
 
 databasePath = 'mongodb://localhost:27017'
 dbCon = MongoClient( databasePath )
@@ -18,6 +19,7 @@ posts = database['mib']
 
 
 urls = ('/', 'index',
+        '/template', 'create_template',
         '/modules', 'list_modules',
 
         '/modules/(.*)', 'get_module',
@@ -113,6 +115,20 @@ class get_node:
         retNode = post['nodes'][node]
         return json.dumps(post['nodes'][node])
 
+class create_template:
+    def GET(self):
+        return "You can only post to this"
+
+    def POST(self):
+        data = web.data()
+        incoming = json.loads(data)
+        templateName = incoming['templateName']
+        recievednodes = mibtemplate.getNodes(incoming['nodes'])
+        web.debug(recievednodes)
+        web.debug("DONEDONEDONEDONEDONE")
+        template = mibtemplate.createTemplate(templateName, recievednodes)
+        web.debug(template)
+        raise web.seeother('')
 
 if __name__ == '__main__':
     app.run()

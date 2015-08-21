@@ -9,7 +9,7 @@ $def with (nodetree)
 	
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">		
 	<link rel="stylesheet" href="/static/themes/default/style.min.css" />
-
+	<link rel="stylesheet" href="/static/jstreecheckbox.css"/>
 	<script type="text/javascript" src="/static/jquery-1.9.1.js"></script>
 	<script type="text/javascript" src="/static/jstree.js"></script>
 	<script type="text/javascript" src="/static/MIBtools.js"></script>
@@ -39,47 +39,21 @@ $def with (nodetree)
 					<input type="submit"/>
 
 				</form>
+
 			</div>
 			<div id="ajaxtest"></div>
 		</div>
 	 	<div class="col-sm-4" style = "border:1px solid black;">
-			$:nodetree 
+			<h5>Templatename: </h5><input type="text" id="templatename"/>
+			<br/>
+			<input type="button" value="Create Template" id="sendtemplate" />
+			$:nodetree
 		</div>
 
 	</div>
 
--	<script>
-		jQuery(function(){
-				jQuery("#jstree")
-					.jstree(
-						{
-
-						"checkbox": {
-
-							"whole_node" : true,
-							"three_state" : false 
-
-						},
-						"plugins" : ["wholerow","checkbox" ]
-				}).on("changed.jstree", function(e, data){
-					var MIBnode = data.node.id;
-					var MIBclass = data.node.li_attr.class;
-					if( MIBclass === "module" ){
-						getModule(MIBnode);
-					}
-					else if(MIBclass === "node"){
-						for( prop in data.node.li_attr){
-							console.log("propname:" + prop);
-						}
-						var module = data.node.li_attr["data-root"];
-						getNode(module, MIBnode);
-					}
-					
-				});
-		});
-
+	<script type="text/javascript" src="/static/jstreehelp.js"></script>
 	
-	</script>
 </body>
 
 </html>

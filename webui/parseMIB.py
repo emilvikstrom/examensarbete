@@ -94,14 +94,15 @@ def assembleDictionary(smidump):
     return moduleDict
 
 
-
+#TODO split this function to smaller functions
 def parseMIB(pathToMIB):
 	print("FROM parser:: " + pathToMIB)
+        #TODO split this to parsefunction
 	with open("MIBdict.py", "w+") as output:
         	#TODO USE THIS EXIT CODE TO HANDLE SEGMENTATION FAULTS	
 		exitCode = call(["smidump", "-f", "python", pathToMIB, "-k"], stdout=output)
 		print("Exitcode:" + str(exitCode))
-	
+	#TODO split this to loadMIB function
 	try:
 		modf, modfilename, moddescr = imp.find_module("MIBdict")
 		try:
@@ -124,7 +125,7 @@ def parseMIB(pathToMIB):
 		quit(1)
             
 
-
+        #TODO Create database module that takes the MIB as argument
 	initStr = "Start parsing {0}".format( MIB['moduleName'] )
 	print( initStr )
         

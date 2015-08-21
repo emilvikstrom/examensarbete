@@ -14,16 +14,44 @@ def getNode(module, nodeName):
     dbCon.close()
 
     #TODO SHOULD RETURN DICT
-    print(post['nodes'][nodeName])
-
+    return post['nodes'][nodeName]
 
 
 #Recieves a list of dicts where every dict is {"moduleName" : moduleName, "node" : nodeName}
 def getNodes(nodeList):
+    nodesToTemplate = []
     for d in nodeList:
-        getNode(d['moduleName'], d['node'])
+        node = getNode(d['moduleName'], d['node'])
+        node['nodeName'] = d['node']
+        nodesToTemplate.append(node)
+    return nodesToTemplate
 
+def syntaxParser(syntax):
+    syntaxType = syntax['type']
+    if 'basetype' in syntaxType.keys():
+        return syntaxType['basetype']
+    if 'name' in syntaxType.keys():
+        return syntaxType['name']
+    else:
+        return
 
+def createTemplate(name, nodes):
+    template = {'templatename' : name}
+    objects = []
+    #Check for nodekind for error handling
+	#TODO THIS IS REALLY IMPORTANT
+    for n in nodes:
+		if (n['nodetype'] == 'scalar') or (n['nodetype'] == 'column'):
+			objectdict = dict()
+			objectdict['nodeName'] = str(n['nodeName'])
+			objectdict['access'] = str(n['access'])
+			objectdict['oid'] = str(n['oid'])
+			#TODO Make this import syntaxdefinitions from other mibs
+			#At the same time, get rid of unicode u'
+			objectdict['syntax'] = syntaxParser(n['syntax'])#str(n['syntax'])
+			objects.append(objectdict)
+    template['objects'] = objects
+    return template
 
 
 if __name__ == '__main__':
@@ -33,6 +61,8 @@ if __name__ == '__main__':
     testDict = dict({'moduleName' : 'SNMPv2-MIB', 'node' : 'sysDescr'})
     testList.append(testDict)
 
-
-    getNodes(testList)
-
+    recievednodes = getNodes(testList)
+#    for r in recievednodes:
+ #       print(r['syntax']['type'])
+    temp = createTemplate("TEST", recievednodes)
+    print(temp)
