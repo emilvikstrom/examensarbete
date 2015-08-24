@@ -6,15 +6,6 @@ import parseMIB as parser
 import mibtemplate
 import databasetool
 
-
-#databasePath = 'mongodb://localhost:27017'
-#dbCon = MongoClient( databasePath )
-#database = dbCon['mibModules']
-#
-#posts = database['mib']
-#collection = database['mib']
-#posts = database.posts
-#TODO Create views for errors
 urls = ('/', 'index',
         '/template', 'create_template',
         '/template/all', 'all_templates',
@@ -110,18 +101,6 @@ class create_template:
         template = json.loads(incoming)
         databasetool.insertTemplate(template)
         return template
-
-#    def POST(self):
-#        data = web.data()
-#        incoming = json.loads(data)
-#        templateName = incoming['templateName']
-#        recievednodes = mibtemplate.getNodes(incoming['nodes'])
-#        web.debug(recievednodes)
-#        web.debug("DONEDONEDONEDONEDONE")
-#        template = mibtemplate.createTemplate(templateName, recievednodes)
-#        web.debug(template)
-#        raise web.seeother('')
-
 
 if __name__ == '__main__':
     app.run()

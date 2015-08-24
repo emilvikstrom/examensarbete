@@ -3,8 +3,10 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 #import json
 import bson.json_util as json
+
+databasePath = 'mongodb://localhost:27017'
+
 def insertParsedMib(MIB):
-	databasePath = 'mongodb://localhost:27017'
 	dbCon = MongoClient( databasePath )
 	database = dbCon['mibModules']
 	collection = database['mib']
@@ -14,7 +16,6 @@ def insertParsedMib(MIB):
 	dbCon.close()
 
 def getAllModuleNames():
-	databasePath = 'mongodb://localhost:27017'
 	dbCon = MongoClient( databasePath )
 	database = dbCon['mibModules']
 
@@ -29,7 +30,6 @@ def getAllModuleNames():
 	return output
 
 def getAllModules():
-    databasePath = 'mongodb://localhost:27017'
     dbCon = MongoClient( databasePath )
     database = dbCon['mibModules']
     posts = database['mib']
@@ -38,7 +38,6 @@ def getAllModules():
     return output
 
 def getModule(module):
-	databasePath = 'mongodb://localhost:27017'
 	dbCon = MongoClient( databasePath )
 	database = dbCon['mibModules']
 	posts = database['mib']
@@ -49,7 +48,6 @@ def getModule(module):
 	return output
 
 def getModuleAllNodes(module):
-	databasePath = 'mongodb://localhost:27017'
 	dbCon = MongoClient( databasePath )
 	database = dbCon['mibModules']
 	posts = database['mib']
@@ -57,7 +55,6 @@ def getModuleAllNodes(module):
 	return json.dumps(post['nodes'].keys())
 
 def getNodeFromModule(module, node):
-	databasePath = 'mongodb://localhost:27017'
 	dbCon = MongoClient( databasePath )
 	database = dbCon['mibModules']
 	posts = database['mib']
@@ -66,7 +63,6 @@ def getNodeFromModule(module, node):
 	return json.dumps(post['nodes'][node])
 
 def insertTemplate(template):
-	databasePath = 'mongodb://localhost:27017'
 	dbCon = MongoClient( databasePath )
 	database = dbCon['allTemplates']
 	collection = database['template']
@@ -75,7 +71,6 @@ def insertTemplate(template):
 	dbCon.close()
 
 def getAllTemplates():
-	databasePath = 'mongodb://localhost:27017'
 	dbCon = MongoClient( databasePath )
 	database = dbCon['allTemplates']
 	posts = database['template']
