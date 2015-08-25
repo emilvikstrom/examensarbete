@@ -23,6 +23,7 @@ def getNodes(nodeList):
     for d in nodeList:
         node = getNode(d['moduleName'], d['node'])
         node['nodeName'] = d['node']
+        node['module'] = d['moduleName']
         nodesToTemplate.append(node)
     return nodesToTemplate
 
@@ -46,10 +47,15 @@ def createTemplate(name, nodes):
 			objectdict['nodeName'] = str(n['nodeName'])
 			objectdict['access'] = str(n['access'])
 			objectdict['oid'] = str(n['oid'])
+                        objectdict['module'] = str(n['module'])
 			#TODO Make this import syntaxdefinitions from other mibs
 			#At the same time, get rid of unicode u'
-			objectdict['syntax'] = syntaxParser(n['syntax'])#str(n['syntax'])
-			objects.append(objectdict)
+                        if 'syntax' in n.keys():
+        		    objectdict['syntax'] = syntaxParser(n['syntax'])#str(n['syntax'])
+                        else:
+                            objectdict['syntax'] = "unknown"
+                        objects.append(objectdict)
+
     template['objects'] = objects
     return template
 

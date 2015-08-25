@@ -4,8 +4,9 @@ from subprocess import call
 from operator import itemgetter
 import re
 from pymongo import MongoClient
-from time import time
+import time
 from datetime import datetime
+import databasetool
 databasePath = 'mongodb://localhost:27017'
 
 def atoi(text):
@@ -19,16 +20,12 @@ def natural_keys(text):
 	'''
 	return [ atoi(c) for c in re.split('(\d+)', text) ]
 
-
-
 '''
 Takes a MIB dictionary from SMIdump and returns all nodes as a list sorted by OID
 '''
 
 def createNodelist(nodes):
 	nodelist = [ nodes[n] for n in nodes.keys() ]
-
-
 	#THIS ONLY WORKS IF NODE KEYS ALWAYS PRINTED IN THE SAME ORDER..		
 	#And it seems to work
 	#p3 .items == .iteritems	p2
@@ -53,6 +50,9 @@ def oidlen(oid):
     return len(oidlist)
 
 def organizeNodes(sortedNodelist):
+
+    startTime = time.clock()
+
     nodequeue = list(sortedNodelist)
     allNodes = list(sortedNodelist)
     retList = list()
@@ -69,13 +69,16 @@ def organizeNodes(sortedNodelist):
         for n in childnodes:
             nodequeue.remove(n)
         childnodes = organizeNodes(childnodes)
-
         parentCandidate['nodes'] = childnodes
         retList.append(parentCandidate)
 
+    stopTime = time.clock()
+    #print("ON {} s ".format(stopTime - startTime))
     return retList
 
 def assembleTree(smidump):
+    startTime = time.clock()
+
     moduleDict = dict( [ ('module', smidump[ 'moduleName' ] ) ] )
     if 'imports' in smidump.keys():
         moduleDict['imports'] = smidump['imports']
@@ -87,6 +90,49 @@ def assembleTree(smidump):
 		tmp = createNodelist(smidump['nodes'])
 		nodetree = organizeNodes(tmp)
 		moduleDict['nodes'] = nodetree
-
+    stopTime = time.clock()
+    #print("AT {} s ".format(stopTime - startTime))
     return moduleDict
 
+def buildNodeTree(treestring, nodes):
+    startTime = time.clock()
+    retString = treestring
+    retString.append( '<ul>' )
+    for n in nodes:
+        retString.append( '<li id="')
+        retString.append(str(n['name']))
+        retString.append( '" class="node" data-root="')
+        retString.append(n['moduleName'])
+        retString.append('">')
+        retString.append(str(n['name']))
+        if n['nodes']:
+            retString = buildNodeTree(retString, n['nodes'])
+        retString.append( "</li>" )
+    retString.append( '</ul>' )
+    stopTime = time.clock()
+    #print("BNT {} s ".format(stopTime - startTime))
+    return retString
+
+def buildModuleTree():
+    startTime = time.clock()
+    retString = []
+    retString.append("<div id='jstree'><ul>")
+    for post in databasetool.getAllModules():
+#        module = mibtools.assembleTree(post)
+
+        module = assembleTree(post)
+        retString.append('<li id="')
+        retString.append(module['module'])
+        retString.append( '" class="module">' )
+        retString.append( module['module'] )
+        if 'nodes' in module.keys():
+            nodes = module['nodes']
+            retString = buildNodeTree(retString, nodes)
+        retString.append( '</li>')
+    retString.append( '</ul>' )
+    stopTime = time.clock()
+    print("BMT {} s ".format(stopTime - startTime))
+    return ''.join(retString)
+
+if __name__ == '__main__':
+    buildModuleTree()

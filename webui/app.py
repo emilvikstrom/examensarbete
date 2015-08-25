@@ -5,6 +5,7 @@ import mibtools
 import parseMIB as parser
 import mibtemplate
 import databasetool
+import time
 
 urls = ('/', 'index',
         '/template', 'create_template',
@@ -18,41 +19,22 @@ urls = ('/', 'index',
 render = web.template.render('templates/')
 app  = web.application(urls, globals())
 
-def buildNodeTree(treestring, nodes):
-    retString = treestring
-    retString += '<ul>'
-    for n in nodes:
-        retString += '<li id="' + str(n['name']) + '" class="node" data-root="' + n['moduleName'] + '">' + str(n['name'])
-        if n['nodes']:
-            retString = buildNodeTree(retString, n['nodes'])
-        retString += "</li>"
-    retString += '</ul>'
-    return retString
 
-#TODO
-#This should be moved, and database code shouldn't be handled here, it broke down right before deadline so this is a really stupid fix
-def buildModuleTree():
-    retString = "<div id='jstree'><ul>"
-    for post in databasetool.getAllModules():
-        module = mibtools.assembleTree(post)
-        retString += '<li id="' + module['module'] +'" class="module">'
-        retString += module['module']
-        nodes = module['nodes']
-        retString = buildNodeTree(retString, nodes)
-        retString += '</li>'
-    retString += '</ul>'
-    return retString
+#treeString = buildModuleTree()
+
 
 
 class index:
     def GET(self):
-        treeString = buildModuleTree()
-        web.debug(treeString)
+        treeString = mibtools.buildModuleTree()
+
+#       web.debug(treeString)
+#        treeString = mibtools.htmlTree()
         return render.index(treeString)
 
     def POST(self):
         incoming = web.input(myfile={})
-        web.debug(incoming['myfile'].filename)
+#        web.debug(incoming['myfile'].filename)
         filename = incoming['myfile'].filename
         filecontent = incoming['myfile'].value
         with open("./upload/"+filename, 'w') as mibfile:
@@ -61,6 +43,7 @@ class index:
         #TODO som real errorhandling
         #let parseMIB return an errorcode and redirect to relevant page
         parser.parseMIB("./upload/"+filename)
+#        treestring = buildModuleTree()
         raise web.seeother('')
 
 #Not sure if database should return json or the conversion should be here
@@ -92,7 +75,7 @@ class create_template:
         recievednodes = mibtemplate.getNodes(nodes)
         template = mibtemplate.createTemplate(templatename, recievednodes)
         previewtemplate = json.dumps(template)
-        web.debug(previewtemplate)
+#        web.debug(previewtemplate)
         return render.preview(previewtemplate)
 
     def POST(self):
