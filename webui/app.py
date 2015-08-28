@@ -19,11 +19,6 @@ urls = ('/', 'index',
 render = web.template.render('templates/')
 app  = web.application(urls, globals())
 
-
-#treeString = buildModuleTree()
-
-
-
 class index:
     def GET(self):
         treeString = mibtools.buildModuleTree()
@@ -42,7 +37,7 @@ class index:
             mibfile.close()
         #TODO som real errorhandling
         #let parseMIB return an errorcode and redirect to relevant page
-        parser.parseMIB("./upload/"+filename)
+        parser.runparser("./upload/"+filename)
 #        treestring = buildModuleTree()
         raise web.seeother('')
 

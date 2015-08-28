@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-#import json
 import bson.json_util as json
 
 databasePath = 'mongodb://localhost:27017'
