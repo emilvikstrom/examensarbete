@@ -1,7 +1,7 @@
 
 //Function for retrieving a module
 var getModule = function(module){
-	jQuery.getJSON( "http://172.20.32.192:8080/modules/" + module, function(data){
+	jQuery.getJSON( "http://localhost:8080/modules/" + module, function(data){
 		var items = [];
 		jQuery.each( data, function(key, val) {
 //			items.push("<li id='" + key + "'>" + key + "</li>" );
@@ -23,7 +23,7 @@ var getModule = function(module){
 var getNode = function(module, node){
 	//Clears table
 	jQuery("#datatable").empty()
-	jQuery.getJSON( "http://172.20.32.192:8080/nodes/" + module + "/" + node, function(data){
+	jQuery.getJSON( "http://localhost:8080/nodes/" + module + "/" + node, function(data){
 		var items = [];
 		items.push("<table border='1'>");
 		jQuery.each( data, function(key, val) {

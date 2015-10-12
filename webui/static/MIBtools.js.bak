@@ -27,34 +27,49 @@ var getNode = function(module, node){
 		var items = [];
 		items.push("<table border='1'>");
 		jQuery.each( data, function(key, val) {
-			if(key === "syntax"){
-				items.push( "<tr><td>" + key + "</td>");
-				items.push("<td>"+prop+"</td><td>Type:"+val["type"]+"</td>");
-				console.log(prop);
+			//TODO this should be a val instanceof Object check instead to generalize all objects
+			//push key is right..
+			//something like 
+			//push col key
+			//push objectprinter
 
+			if(val instanceof Object){
 
-			items.push( "</tr>");
+				items.push("<td>" + key + "</td>" + objectPrinter(val) );
+
 			}else{
 				items.push( "<tr><td>" + key + "</td><td>" + val + "</td></tr>" );
 			}
-//			items.push("<li id='" + key + "'>" + key + "</li>" );
-//			if(key === "module"){
-//				console.log("Found key")
-//				jQuery("#datatable tr:last" ).after(
-//					"<tr><td>modulename</td><td>"+val+"</td></tr>"
-//				);
-//			}
-
-//			console.log("Key: " + key + " Val: " + val);
-
 		});
 		items.push("</table>");
 		jQuery("#datatable").append(items.join( "" ));	
-//		jQuery("<ul/>", {
-//			"class": "my-new-list",
-//			html: items.join( "" )
-//		}).appendTo("body" );
+
 	});
 }
 
+/*
+ * TODO
+ * Create an object printer that puts all objects as tables inside a field
+ * Thats is what creates bugs right now
+ *
+ * NOTE Think it's done 
+ */
+
+
+var objectPrinter = function(obj){
+	var retArr = [];
+	retArr.push("<td><table border='1'><tr>");
+
+	//Code goes here
+	jQuery.each( obj, function(key, val){
+		if( val instanceof Object){
+			retArr.push("<td>" + key + "</td>" + objectPrinter(val) );
+		}else{
+			retArr.push("<td>" + key + "</td><td>" + val + "</td>");
+		}
+	});
+
+	retArr.push("</tr></table></td>");
+	return retArr.join( "" );
+}
 
